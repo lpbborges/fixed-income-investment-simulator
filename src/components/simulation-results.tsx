@@ -56,17 +56,17 @@ export function SimulationResults({
                     por {months} meses
                 </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     {resultCards.map((card) => (
-                        <Card key={card.title} className={cn("bg-primary/10")}>
-                            <CardHeader className="pb-2">
+                        <Card key={card.title} className={cn("bg-primary/10 py-3")}>
+                            <CardHeader>
                                 <CardTitle className="text-sm font-medium">
                                     {card.title}
                                 </CardTitle>
                             </CardHeader>
                             <CardContent>
-                                <div className="text-2xl font-bold">{card.value}</div>
+                                <div className="text-xl font-bold">{card.value}</div>
                             </CardContent>
                         </Card>
                     ))}

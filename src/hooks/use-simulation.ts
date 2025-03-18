@@ -4,7 +4,12 @@ import type {
 	SimulationFormData,
 	IndexData,
 } from "@/lib/types";
-import { MODALITIES, INDEXERS, TAX_BRACKETS } from "@/lib/constants";
+import {
+	MODALITIES,
+	INDEXERS,
+	TAX_BRACKETS,
+	INVESTMENT_TYPES,
+} from "@/lib/constants";
 
 export function useSimulation() {
 	const [result, setResult] = useState<SimulationResult | null>(null);
@@ -111,7 +116,7 @@ function calculateTaxes(
 	totalInterest: number,
 	investment: number,
 ) {
-	if (typeOfInvestment !== "cdb") {
+	if (typeOfInvestment === INVESTMENT_TYPES.WITHOUT_TAX_DISCOUNT) {
 		return {
 			totalNetAmount: investment + totalInterest,
 			incomeTaxDiscount: 0,
