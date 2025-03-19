@@ -16,10 +16,7 @@ export const simulationFormSchema = z.object({
 			(val) => !Number.isNaN(Number(val)) && Number(val) > 0,
 			"Período deve ser maior que zero",
 		),
-	typeOfInvestment: z.enum([
-		INVESTMENT_TYPES.WITH_TAX_DISCOUNT,
-		INVESTMENT_TYPES.WITHOUT_TAX_DISCOUNT,
-	]),
+	typeOfInvestment: z.enum([INVESTMENT_TYPES.CDB, INVESTMENT_TYPES.LCI_LCA]),
 	modality: z.enum([MODALITIES.PRE, MODALITIES.POS]),
 	indexer: z.enum([INDEXERS.CDI, INDEXERS.IPCA]),
 	rate: z

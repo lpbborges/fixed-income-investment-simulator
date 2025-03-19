@@ -82,19 +82,17 @@ export function SimulationForm({
 									>
 										<div className="flex items-center space-x-2">
 											<RadioGroupItem
-												value={INVESTMENT_TYPES.WITH_TAX_DISCOUNT}
-												id="with-tax-discount-ri"
+												value={INVESTMENT_TYPES.CDB}
+												id="cdb-ri"
 											/>
-											<FormLabel htmlFor="with-tax-discount-ri">CDB</FormLabel>
+											<FormLabel htmlFor="cdb-ri">CDB</FormLabel>
 										</div>
 										<div className="flex items-center space-x-2">
 											<RadioGroupItem
-												value={INVESTMENT_TYPES.WITHOUT_TAX_DISCOUNT}
-												id="without-tax-discount-ri"
+												value={INVESTMENT_TYPES.LCI_LCA}
+												id="lci_lca-ri"
 											/>
-											<FormLabel htmlFor="without-tax-discount-ri">
-												LCI/LCA
-											</FormLabel>
+											<FormLabel htmlFor="lci_lca-ri">LCI/LCA</FormLabel>
 										</div>
 									</RadioGroup>
 								</FormControl>

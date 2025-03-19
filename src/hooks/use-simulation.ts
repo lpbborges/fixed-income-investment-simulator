@@ -1,20 +1,22 @@
 import { useState } from "react";
+
+import {
+	MODALITIES,
+	INDEXERS,
+	INVESTMENT_TYPES_WITH_TAX_DISCOUNT,
+} from "@/lib/constants";
+import * as financial from "@/lib/financial";
 import type {
 	SimulationResult,
 	SimulationFormData,
 	IndexData,
 } from "@/lib/types";
-import {
-	MODALITIES,
-	INDEXERS,
-	TAX_BRACKETS,
-	INVESTMENT_TYPES,
-} from "@/lib/constants";
+import { formatPercent } from "@/lib/formatters";
 
 export function useSimulation() {
 	const [result, setResult] = useState<SimulationResult | null>(null);
 
-	const calculateSimulation = (
+	const simulate = (
 		formData: SimulationFormData,
 		indexData: IndexData | null,
 	) => {
@@ -32,35 +34,50 @@ export function useSimulation() {
 			indexData,
 			investmentRate,
 		);
-		const {
-			monthsArray,
-			balanceArray,
-			interestArray,
-			totalInterest,
-			currentBalance,
-		} = calculateMonthlyValues(investment, period, monthlyRate);
 
-		const { totalNetAmount, incomeTaxDiscount, totalNetIncome } =
-			calculateTaxes(
-				formData.typeOfInvestment,
-				period,
-				totalInterest,
-				investment,
-			);
+		const totalGrossAmount = financial.calculateFutureValue(
+			monthlyRate * 100,
+			period,
+			investment,
+		);
+		const totalNetAmount = INVESTMENT_TYPES_WITH_TAX_DISCOUNT.includes(
+			formData.typeOfInvestment,
+		)
+			? financial.calculateFutureValueWithRecurringInvestmentsAndTaxDiscounts(
+					totalGrossAmount,
+					period,
+					investment,
+				)
+			: totalGrossAmount;
 
 		setResult({
-			months: monthsArray,
-			balance: balanceArray,
-			interest: interestArray,
-			totalGrossIncome: totalInterest,
-			totalGrossAmount: currentBalance,
-			incomeTaxDiscount,
+			title: buildInvestmentTitle(formData),
+			totalGrossIncome: totalGrossAmount - investment,
+			totalGrossAmount,
+			incomeTaxDiscount: totalGrossAmount - totalNetAmount,
 			totalNetAmount,
-			totalNetIncome,
+			totalNetIncome: totalNetAmount - investment,
 		});
 	};
 
-	return { result, calculateSimulation };
+	return { result, simulate };
+}
+
+function buildInvestmentTitle(formData: SimulationFormData) {
+	const modalityObj = {
+		pos: "Pós-Fixado",
+		pre: "Prefixado",
+	};
+
+	if (formData.modality === "pos") {
+		if (formData.indexer === "ipca") {
+			return `${formData.typeOfInvestment} ${modalityObj[formData.modality]} IPCA+ ${formatPercent(Number.parseFloat(formData.rate))}`.toUpperCase();
+		}
+
+		return `${formData.typeOfInvestment} ${modalityObj[formData.modality]} ${formatPercent(Number.parseFloat(formData.rate))} CDI`.toUpperCase();
+	}
+
+	return `${formData.typeOfInvestment} ${modalityObj[formData.modality]} ${formatPercent(Number.parseFloat(formData.rate))}`.toUpperCase();
 }
 
 function calculateMonthlyRate(
@@ -77,59 +94,4 @@ function calculateMonthlyRate(
 	return formData.indexer === INDEXERS.CDI
 		? (1 + indexData.rate * investmentRate) ** (1 / 12) - 1
 		: (1 + indexData.rate + investmentRate) ** (1 / 12) - 1;
-}
-
-function calculateMonthlyValues(
-	investment: number,
-	period: number,
-	monthlyRate: number,
-) {
-	const monthsArray: number[] = [];
-	const balanceArray: number[] = [];
-	const interestArray: number[] = [];
-
-	let currentBalance = investment;
-	let totalInterest = 0;
-
-	for (let i = 0; i < period; i++) {
-		const monthlyInterest = currentBalance * monthlyRate;
-		totalInterest += monthlyInterest;
-		currentBalance += monthlyInterest;
-
-		monthsArray.push(i);
-		balanceArray.push(currentBalance);
-		interestArray.push(monthlyInterest);
-	}
-
-	return {
-		monthsArray,
-		balanceArray,
-		interestArray,
-		totalInterest,
-		currentBalance,
-	};
-}
-
-function calculateTaxes(
-	typeOfInvestment: string,
-	period: number,
-	totalInterest: number,
-	investment: number,
-) {
-	if (typeOfInvestment === INVESTMENT_TYPES.WITHOUT_TAX_DISCOUNT) {
-		return {
-			totalNetAmount: investment + totalInterest,
-			incomeTaxDiscount: 0,
-			totalNetIncome: totalInterest,
-		};
-	}
-
-	const taxBracket =
-		TAX_BRACKETS.find((bracket) => period <= bracket.months) ||
-		TAX_BRACKETS[TAX_BRACKETS.length - 1];
-	const incomeTaxDiscount = totalInterest * taxBracket.rate;
-	const totalNetIncome = totalInterest - incomeTaxDiscount;
-	const totalNetAmount = investment + totalNetIncome;
-
-	return { totalNetAmount, incomeTaxDiscount, totalNetIncome };
 }

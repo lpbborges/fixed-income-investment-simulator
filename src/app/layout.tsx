@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-	title: "Simulador de investimento em renda fixa",
+	title: "Simulador de investimentos em renda fixa",
 	description: "Simule o rendimento de investimentos em renda fixa",
 };
 

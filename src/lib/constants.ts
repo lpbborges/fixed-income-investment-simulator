@@ -1,7 +1,11 @@
 export const INVESTMENT_TYPES = {
-	WITH_TAX_DISCOUNT: "with_tax_discount",
-	WITHOUT_TAX_DISCOUNT: "without_tax_discount",
+	CDB: "cdb",
+	LCI_LCA: "lci/lca",
 } as const;
+
+export const INVESTMENT_TYPES_WITH_TAX_DISCOUNT = [
+	INVESTMENT_TYPES.CDB,
+] as string[];
 
 export const MODALITIES = {
 	PRE: "pre",
