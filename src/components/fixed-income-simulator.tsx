@@ -19,6 +19,7 @@ import { SimulationResults } from "./simulation-results";
 
 const defaultValues: SimulationFormData = {
 	initialInvestment: "",
+	monthlyInvestment: "",
 	months: "",
 	typeOfInvestment: INVESTMENT_TYPES.CDB,
 	modality: MODALITIES.POS,
