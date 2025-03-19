@@ -21,6 +21,8 @@ export function useSimulation() {
 		indexData: IndexData | null,
 	) => {
 		const investment = Number.parseFloat(formData.initialInvestment) || 0;
+		const monthlyInvestment =
+			Number.parseFloat(formData.monthlyInvestment) || 0;
 		const period = Number.parseInt(formData.months) || 0;
 		const investmentRate =
 			Number.parseFloat(formData.rate.replace(",", ".")) / 100;
@@ -35,11 +37,13 @@ export function useSimulation() {
 			investmentRate,
 		);
 
-		const totalGrossAmount = financial.calculateFutureValue(
-			monthlyRate * 100,
-			period,
-			investment,
-		);
+		const totalGrossAmount =
+			financial.calculateFutureValueWithRecurringInvestments(
+				monthlyRate * 100,
+				period,
+				investment,
+				monthlyInvestment,
+			);
 		const totalNetAmount = INVESTMENT_TYPES_WITH_TAX_DISCOUNT.includes(
 			formData.typeOfInvestment,
 		)
@@ -47,16 +51,20 @@ export function useSimulation() {
 					totalGrossAmount,
 					period,
 					investment,
+					monthlyInvestment,
 				)
 			: totalGrossAmount;
 
+		const totalNetIncome =
+			totalNetAmount - (investment + monthlyInvestment * period);
+
 		setResult({
-			title: buildInvestmentTitle(formData),
+			description: buildInvestmentTitle(formData),
 			totalGrossIncome: totalGrossAmount - investment,
 			totalGrossAmount,
 			incomeTaxDiscount: totalGrossAmount - totalNetAmount,
 			totalNetAmount,
-			totalNetIncome: totalNetAmount - investment,
+			totalNetIncome,
 		});
 	};
 

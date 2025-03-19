@@ -4,11 +4,10 @@ import { INVESTMENT_TYPES, MODALITIES, INDEXERS } from "./constants";
 export const simulationFormSchema = z.object({
 	initialInvestment: z
 		.string()
-		.min(1, "Valor inicial é obrigatório")
-		.refine(
-			(val) => !Number.isNaN(Number(val)) && Number(val) > 0,
-			"Valor inicial deve ser maior que zero",
-		),
+		.refine((val) => Number(val) > 0, "Valor inicial deve ser maior que zero"),
+	monthlyInvestment: z
+		.string()
+		.refine((val) => Number(val) > 0, "Aporte mensal deve ser maior que zero"),
 	months: z
 		.string()
 		.min(1, "Período é obrigatório")

@@ -49,8 +49,8 @@ export function SimulationResults({
 					</TableHeader>
 					<TableBody>
 						{result.map((simulation) => (
-							<TableRow key={simulation.title}>
-								<TableCell>{simulation.title}</TableCell>
+							<TableRow key={simulation.description}>
+								<TableCell>{simulation.description}</TableCell>
 								<TableCell className="text-center">
 									{formatCurrency(simulation.totalGrossAmount)}
 								</TableCell>
