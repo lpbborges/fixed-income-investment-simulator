@@ -37,17 +37,16 @@ export function useSimulation() {
 			investmentRate,
 		);
 
-		const totalGrossAmount =
-			financial.calculateFutureValueWithRecurringInvestments(
-				monthlyRate * 100,
-				period,
-				investment,
-				monthlyInvestment,
-			);
+		const totalGrossAmount = financial.calculateFutureValue(
+			monthlyRate * 100,
+			period,
+			investment,
+			monthlyInvestment,
+		);
 		const totalNetAmount = INVESTMENT_TYPES_WITH_TAX_DISCOUNT.includes(
 			formData.typeOfInvestment,
 		)
-			? financial.calculateFutureValueWithRecurringInvestmentsAndTaxDiscounts(
+			? financial.calculateFutureValueWithTaxDiscounts(
 					totalGrossAmount,
 					period,
 					investment,

@@ -17,9 +17,9 @@ export const INDEXERS = {
 	IPCA: "ipca",
 } as const;
 
-export const TAX_BRACKETS = [
-	{ months: 6, rate: 0.225 },
-	{ months: 12, rate: 0.2 },
-	{ months: 24, rate: 0.175 },
-	{ months: Number.POSITIVE_INFINITY, rate: 0.15 },
-] as const;
+export const TAX_RATES = {
+	lessThan6Months: 0.225,
+	lessThan12Months: 0.2,
+	lessThan24Months: 0.175,
+	atLeast24Months: 0.15,
+} as const;

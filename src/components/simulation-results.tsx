@@ -42,9 +42,7 @@ export function SimulationResults({
 							<TableHead>Investimento</TableHead>
 							<TableHead className="text-center">Valor total bruto</TableHead>
 							<TableHead className="text-center">Valor total líquido</TableHead>
-							<TableHead className="text-center">
-								Rendimentos líquidos
-							</TableHead>
+							<TableHead className="text-center">Rendimento líquido</TableHead>
 						</TableRow>
 					</TableHeader>
 					<TableBody>
