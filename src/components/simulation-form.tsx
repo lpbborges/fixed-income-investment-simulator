@@ -82,19 +82,17 @@ export function SimulationForm({
 									>
 										<div className="flex items-center space-x-2">
 											<RadioGroupItem
-												value={INVESTMENT_TYPES.WITH_TAX_DISCOUNT}
-												id="with-tax-discount-ri"
+												value={INVESTMENT_TYPES.CDB}
+												id="cdb-ri"
 											/>
-											<FormLabel htmlFor="with-tax-discount-ri">CDB</FormLabel>
+											<FormLabel htmlFor="cdb-ri">CDB</FormLabel>
 										</div>
 										<div className="flex items-center space-x-2">
 											<RadioGroupItem
-												value={INVESTMENT_TYPES.WITHOUT_TAX_DISCOUNT}
-												id="without-tax-discount-ri"
+												value={INVESTMENT_TYPES.LCI_LCA}
+												id="lci_lca-ri"
 											/>
-											<FormLabel htmlFor="without-tax-discount-ri">
-												LCI/LCA
-											</FormLabel>
+											<FormLabel htmlFor="lci_lca-ri">LCI/LCA</FormLabel>
 										</div>
 									</RadioGroup>
 								</FormControl>
@@ -157,7 +155,8 @@ export function SimulationForm({
 							</FormItem>
 						)}
 					/>
-
+				</div>
+				<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 					<FormField
 						control={form.control}
 						name="initialInvestment"
@@ -168,7 +167,7 @@ export function SimulationForm({
 									<Input
 										{...field}
 										placeholder="1000"
-										aria-label="Investimento Inicial em Reais"
+										aria-label="Investimento inicial em reais"
 									/>
 								</FormControl>
 								<FormMessage />
@@ -176,6 +175,23 @@ export function SimulationForm({
 						)}
 					/>
 
+					<FormField
+						control={form.control}
+						name="monthlyInvestment"
+						render={({ field }) => (
+							<FormItem>
+								<FormLabel>Aporte mensal (R$)</FormLabel>
+								<FormControl>
+									<Input
+										{...field}
+										placeholder="100"
+										aria-label="Aporte mensal em reais"
+									/>
+								</FormControl>
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
 					<FormField
 						control={form.control}
 						name="months"

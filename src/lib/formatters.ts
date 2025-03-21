@@ -25,7 +25,6 @@ export function formatPercent(value: number): string {
 export function formatDate(dateString?: string) {
 	if (!dateString) return "";
 
-	// Brazilian date format is DD/MM/YYYY
 	const parts = dateString.split("/");
 	if (parts.length !== 3) return dateString;
 

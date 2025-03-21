@@ -1,77 +1,68 @@
 import type { SimulationResult } from "@/lib/types";
 import { formatCurrency } from "@/lib/formatters";
-import { cn } from "@/lib/utils";
 import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
+	Card,
+	CardContent,
+	CardDescription,
+	CardHeader,
+	CardTitle,
 } from "./ui/card";
+import {
+	Table,
+	TableBody,
+	TableCell,
+	TableHead,
+	TableHeader,
+	TableRow,
+} from "./ui/table";
 
 interface SimulationResultsProps {
-    result: SimulationResult;
-    initialInvestment: string;
-    months: string;
+	result: SimulationResult[];
+	initialInvestment: string;
+	months: string;
 }
 
 export function SimulationResults({
-    result,
-    initialInvestment,
-    months,
+	result,
+	initialInvestment,
+	months,
 }: SimulationResultsProps) {
-    const resultCards = [
-        {
-            title: "Investimento inicial",
-            value: formatCurrency(Number(initialInvestment)),
-        },
-        {
-            title: "Rendimento bruto",
-            value: formatCurrency(result.totalGrossIncome),
-        },
-        {
-            title: "Valor final bruto",
-            value: formatCurrency(result.totalGrossAmount),
-        },
-        {
-            title: "Descontos de IR",
-            value: formatCurrency(result.incomeTaxDiscount),
-        },
-        {
-            title: "Rendimento líquido",
-            value: formatCurrency(result.totalNetIncome),
-        },
-        {
-            title: "Valor final líquido",
-            value: formatCurrency(result.totalNetAmount),
-        },
-    ];
-
-    return (
-        <Card>
-            <CardHeader>
-                <CardTitle>Resultado da Simulação</CardTitle>
-                <CardDescription>
-                    Investimento inicial de {formatCurrency(Number(initialInvestment))}{" "}
-                    por {months} meses
-                </CardDescription>
-            </CardHeader>
-            <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    {resultCards.map((card) => (
-                        <Card key={card.title} className={cn("bg-primary/10 py-3")}>
-                            <CardHeader>
-                                <CardTitle className="text-sm font-medium">
-                                    {card.title}
-                                </CardTitle>
-                            </CardHeader>
-                            <CardContent>
-                                <div className="text-xl font-bold">{card.value}</div>
-                            </CardContent>
-                        </Card>
-                    ))}
-                </div>
-            </CardContent>
-        </Card>
-    );
+	return (
+		<Card>
+			<CardHeader>
+				<CardTitle>Resultado da Simulação</CardTitle>
+				<CardDescription>
+					{`Investimento inicial de ${formatCurrency(Number(initialInvestment))} por ${months} meses`}
+				</CardDescription>
+			</CardHeader>
+			<CardContent>
+				<Table>
+					<TableHeader>
+						<TableRow>
+							<TableHead>Investimento</TableHead>
+							<TableHead className="text-center">Valor total bruto</TableHead>
+							<TableHead className="text-center">Valor total líquido</TableHead>
+							<TableHead className="text-center">Rendimento líquido</TableHead>
+						</TableRow>
+					</TableHeader>
+					<TableBody>
+						{result.map((simulation) => (
+							<TableRow key={simulation.description}>
+								<TableCell>{simulation.description}</TableCell>
+								<TableCell className="text-center">
+									{formatCurrency(simulation.totalGrossAmount)}
+								</TableCell>
+								<TableCell className="text-center">
+									{formatCurrency(simulation.totalNetAmount)}
+								</TableCell>
+								<TableCell className="text-center">
+									{formatCurrency(simulation.totalNetIncome)}
+								</TableCell>
+							</TableRow>
+						))}
+					</TableBody>
+				</Table>
+			</CardContent>
+		</Card>
+	);
 }

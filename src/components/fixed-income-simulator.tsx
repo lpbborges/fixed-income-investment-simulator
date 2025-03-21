@@ -19,8 +19,9 @@ import { SimulationResults } from "./simulation-results";
 
 const defaultValues: SimulationFormData = {
 	initialInvestment: "",
+	monthlyInvestment: "",
 	months: "",
-	typeOfInvestment: INVESTMENT_TYPES.WITH_TAX_DISCOUNT,
+	typeOfInvestment: INVESTMENT_TYPES.CDB,
 	modality: MODALITIES.POS,
 	indexer: INDEXERS.CDI,
 	rate: "",
@@ -32,11 +33,11 @@ export function FixedIncomeSimulator() {
 		defaultValues,
 	});
 
-	const { calculateSimulation, result } = useSimulation();
+	const { simulate, result } = useSimulation();
 	const { error, indexData, isLoading } = useIndexData(form.watch("indexer"));
 
 	const onSubmit = (data: SimulationFormData) => {
-		calculateSimulation(data, indexData);
+		simulate(data, indexData);
 	};
 
 	return (
@@ -61,7 +62,7 @@ export function FixedIncomeSimulator() {
 			</Card>
 			{result && (
 				<SimulationResults
-					result={result}
+					result={[result]}
 					initialInvestment={form.getValues("initialInvestment")}
 					months={form.getValues("months")}
 				/>
