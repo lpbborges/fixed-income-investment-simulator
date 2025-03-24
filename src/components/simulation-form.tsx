@@ -1,10 +1,12 @@
 "use client";
 
-import { Loader2 } from "lucide-react";
+import { Loader2, PlusCircle } from "lucide-react";
 import type { UseFormReturn } from "react-hook-form";
-import type { SimulationFormData, IndexData } from "@/lib/types";
+
+import type { SimulationFormData, Investment, IndexerData } from "@/lib/types";
 import { INVESTMENT_TYPES, MODALITIES, INDEXERS } from "@/lib/constants";
 import { formatDate } from "@/lib/formatters";
+import { InvestmentItem } from "./investment-item";
 import { Button } from "./ui/button";
 import {
 	Form,
@@ -15,148 +17,52 @@ import {
 	FormMessage,
 } from "./ui/form";
 import { Input } from "./ui/input";
-import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
 
 interface SimulationFormProps {
 	form: UseFormReturn<SimulationFormData>;
 	onSubmit: (data: SimulationFormData) => void;
-	indexData: IndexData | null;
-	isLoading: boolean;
-	error: string | null;
+	fetchIndexersError: string | null;
+	indexersData: IndexerData[];
+	isFetchingIndexers: boolean;
 }
 
 export function SimulationForm({
 	form,
 	onSubmit,
-	indexData,
-	isLoading,
-	error,
+	fetchIndexersError,
+	indexersData,
+	isFetchingIndexers,
 }: SimulationFormProps) {
-	const modality = form.watch("modality");
-	const indexer = form.watch("indexer");
+	const investments = form.watch("investments");
+
+	const addInvestment = () => {
+		const newInvestment: Investment = {
+			id: `investment-${Date.now()}`,
+			typeOfInvestment: INVESTMENT_TYPES.CDB,
+			modality: MODALITIES.POS,
+			indexer: INDEXERS.CDI,
+			rate: "100",
+		};
+
+		form.setValue("investments", [...investments, newInvestment]);
+	};
+
+	const deleteInvestment = (id: string) => {
+		const filteredInvestments = investments.filter((inv) => inv.id !== id);
+		form.setValue("investments", filteredInvestments);
+	};
+
+	const updateInvestment = (updatedInvestment: Investment) => {
+		const updatedInvestments = investments.map((inv) =>
+			inv.id === updatedInvestment.id ? updatedInvestment : inv,
+		);
+		form.setValue("investments", updatedInvestments);
+	};
 
 	return (
 		<Form {...form}>
 			<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-				{modality !== MODALITIES.PRE && (
-					<div className="flex items-center space-x-2">
-						{isLoading ? (
-							<div className="flex items-center text-sm text-muted-foreground">
-								<Loader2 className="mr-2 h-4 w-4 animate-spin" />
-								Obtendo taxa {indexer.toUpperCase()} atual...
-							</div>
-						) : (
-							<div className="space-y-1">
-								{indexData && (
-									<>
-										<p className="text-sm font-medium">
-											{indexer.toUpperCase()} atual:{" "}
-											{(indexData.rate * 100).toFixed(2)}% ao ano
-										</p>
-										<p className="text-xs text-muted-foreground">
-											Fonte: {indexData.source}
-											{indexData.date &&
-												` • Atualizado em: ${formatDate(indexData.date)}`}
-											{indexData.description && ` • ${indexData.description}`}
-										</p>
-									</>
-								)}
-								{error && <p className="text-xs text-destructive">{error}</p>}
-							</div>
-						)}
-					</div>
-				)}
-
 				<div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-					<FormField
-						control={form.control}
-						name="typeOfInvestment"
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel>Tipo de Investimento</FormLabel>
-								<FormControl>
-									<RadioGroup
-										onValueChange={field.onChange}
-										defaultValue={field.value}
-										className="flex flex-col space-y-1"
-									>
-										<div className="flex items-center space-x-2">
-											<RadioGroupItem
-												value={INVESTMENT_TYPES.CDB}
-												id="cdb-ri"
-											/>
-											<FormLabel htmlFor="cdb-ri">CDB</FormLabel>
-										</div>
-										<div className="flex items-center space-x-2">
-											<RadioGroupItem
-												value={INVESTMENT_TYPES.LCI_LCA}
-												id="lci_lca-ri"
-											/>
-											<FormLabel htmlFor="lci_lca-ri">LCI/LCA</FormLabel>
-										</div>
-									</RadioGroup>
-								</FormControl>
-								<FormMessage />
-							</FormItem>
-						)}
-					/>
-
-					<FormField
-						control={form.control}
-						name="modality"
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel>Modalidade</FormLabel>
-								<FormControl>
-									<RadioGroup
-										onValueChange={field.onChange}
-										defaultValue={field.value}
-										className="flex flex-col space-y-1"
-									>
-										<div className="flex items-center space-x-2">
-											<RadioGroupItem value={MODALITIES.POS} id="pos" />
-											<FormLabel htmlFor="pos">Pós-fixado</FormLabel>
-										</div>
-										<div className="flex items-center space-x-2">
-											<RadioGroupItem value={MODALITIES.PRE} id="pre" />
-											<FormLabel htmlFor="pre">Prefixado</FormLabel>
-										</div>
-									</RadioGroup>
-								</FormControl>
-								<FormMessage />
-							</FormItem>
-						)}
-					/>
-
-					<FormField
-						control={form.control}
-						name="indexer"
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel>Indexador</FormLabel>
-								<FormControl>
-									<RadioGroup
-										onValueChange={field.onChange}
-										defaultValue={field.value}
-										disabled={modality === MODALITIES.PRE}
-										className="flex flex-col space-y-1"
-									>
-										<div className="flex items-center space-x-2">
-											<RadioGroupItem value={INDEXERS.CDI} id="indexer-cdi" />
-											<FormLabel htmlFor="indexer-cdi">CDI</FormLabel>
-										</div>
-										<div className="flex items-center space-x-2">
-											<RadioGroupItem value={INDEXERS.IPCA} id="indexer-ipca" />
-											<FormLabel htmlFor="indexer-ipca">IPCA+</FormLabel>
-										</div>
-									</RadioGroup>
-								</FormControl>
-								<FormMessage />
-							</FormItem>
-						)}
-					/>
-				</div>
-				<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 					<FormField
 						control={form.control}
 						name="initialInvestment"
@@ -167,7 +73,7 @@ export function SimulationForm({
 									<Input
 										{...field}
 										placeholder="1000"
-										aria-label="Investimento inicial em reais"
+										aria-label="Investimento Inicial em Reais"
 									/>
 								</FormControl>
 								<FormMessage />
@@ -192,6 +98,7 @@ export function SimulationForm({
 							</FormItem>
 						)}
 					/>
+
 					<FormField
 						control={form.control}
 						name="months"
@@ -209,29 +116,79 @@ export function SimulationForm({
 							</FormItem>
 						)}
 					/>
-
-					<FormField
-						control={form.control}
-						name="rate"
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel>Rentabilidade (%)</FormLabel>
-								<FormControl>
-									<Input
-										{...field}
-										placeholder="100"
-										aria-label="Taxa de rentabilidade em porcentagem"
-									/>
-								</FormControl>
-								<FormMessage />
-							</FormItem>
-						)}
-					/>
 				</div>
-
-				<div className="w-full flex justify-center">
-					<Button type="submit" disabled={isLoading}>
-						{isLoading ? (
+				{isFetchingIndexers ? (
+					<div className="flex items-center text-sm text-muted-foreground">
+						<Loader2 className="mr-2 h-4 w-4 animate-spin" />
+						Obtendo taxas atuais dos indexadores...
+					</div>
+				) : (
+					<div className="w-full flex gap-4">
+						{indexersData.map((data) => (
+							<div
+								key={data.indexer}
+								className="w-full space-y-1 p-2 border rounded-md"
+							>
+								<p className="text-sm font-medium">
+									{data.indexer.toUpperCase()}: {(data.rate * 100).toFixed(2)}%
+									ao ano
+								</p>
+								<p className="text-xs text-muted-foreground">
+									{data.date && ` • Atualizado em: ${formatDate(data.date)}`}
+									{data.description && ` • ${data.description}`}
+								</p>
+							</div>
+						))}
+						{fetchIndexersError && (
+							<p className="text-xs text-destructive">{fetchIndexersError}</p>
+						)}
+					</div>
+				)}
+				<div className="space-y-4">
+					<div>
+						<div className="flex justify-between items-center">
+							<h3 className="text-lg font-medium">Investimentos</h3>
+							<Button
+								type="button"
+								onClick={addInvestment}
+								variant="outline"
+								disabled={isFetchingIndexers}
+							>
+								<PlusCircle className="mr-2 h-4 w-4" />
+								Adicionar investimento
+							</Button>
+						</div>
+					</div>
+					{investments.length === 0 && (
+						<div className="text-center p-4 border border-dashed rounded-md">
+							<p className="text-muted-foreground">
+								Adicione pelo menos um investimento para simular
+							</p>
+						</div>
+					)}
+					{investments.map((investment) => (
+						<InvestmentItem
+							key={investment.id}
+							investment={investment}
+							onChange={updateInvestment}
+							onDelete={deleteInvestment}
+							isDisabled={isFetchingIndexers}
+						/>
+					))}
+				</div>
+				<div className="w-full flex justify-end gap-2">
+					<Button
+						type="button"
+						variant="outline"
+						disabled={isFetchingIndexers}
+						onClick={() => {
+							form.reset();
+						}}
+					>
+						Limpar
+					</Button>
+					<Button type="submit" disabled={isFetchingIndexers}>
+						{isFetchingIndexers ? (
 							<Loader2 className="h-4 w-4 animate-spin" />
 						) : (
 							"Simular"
