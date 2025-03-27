@@ -18,12 +18,12 @@ export function useSimulation() {
 		formData: SimulationFormData,
 		indexersData: IndexerData[],
 	) => {
+		const initialInvestment =
+			Number.parseFloat(formData.initialInvestment) || 0;
+		const monthlyInvestment =
+			Number.parseFloat(formData.monthlyInvestment) || 0;
+
 		const result = formData.investments.map((investment) => {
-			const initialInvestment =
-				Number.parseFloat(formData.initialInvestment) || 0;
-			const monthlyInvestment =
-				Number.parseFloat(formData.monthlyInvestment) || 0;
-			const amountOfMonths = Number(formData.months);
 			const investmentIndexer = indexersData.find(
 				(data) => data.indexer === investment.indexer,
 			);
@@ -35,7 +35,7 @@ export function useSimulation() {
 			);
 			const totalGrossAmount = financial.calculateFutureValue(
 				monthlyRate,
-				amountOfMonths,
+				formData.months,
 				initialInvestment,
 				monthlyInvestment,
 			);
@@ -43,14 +43,14 @@ export function useSimulation() {
 				investment.typeOfInvestment === INVESTMENT_TYPES.CDB
 					? financial.calculateFutureValueWithTaxDiscounts(
 							totalGrossAmount,
-							amountOfMonths,
+							formData.months,
 							initialInvestment,
 							monthlyInvestment,
 						)
 					: totalGrossAmount;
 			const totalNetIncome =
 				totalNetAmount -
-				(initialInvestment + monthlyInvestment * amountOfMonths);
+				(initialInvestment + monthlyInvestment * formData.months);
 
 			return {
 				description: buildInvestmentTitle(investment),

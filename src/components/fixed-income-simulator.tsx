@@ -19,7 +19,7 @@ import { SimulationForm } from "./simulation-form";
 
 const defaultValues: SimulationFormData = {
     initialInvestment: "",
-    months: "",
+    months: 0,
     monthlyInvestment: "",
     investments: [],
 };

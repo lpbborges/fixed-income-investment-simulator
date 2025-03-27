@@ -159,9 +159,13 @@ export function SimulationForm({
 							</Button>
 						</div>
 					</div>
-					{investments.length === 0 && (
-						<div className="text-center p-4 border border-dashed rounded-md">
-							<p className="text-muted-foreground">
+					{investments.length <= 0 && (
+						<div
+							className={`text-center p-4 border border-dashed rounded-md ${form.getFieldState("investments").invalid ? " border-destructive" : ""}`}
+						>
+							<p
+								className={`${form.getFieldState("investments").invalid ? "text-destructive" : "text-muted-foreground"}`}
+							>
 								Adicione pelo menos um investimento para simular
 							</p>
 						</div>
