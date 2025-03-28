@@ -17,23 +17,15 @@ import {
 } from "./ui/table";
 
 interface SimulationResultsProps {
-	result: SimulationResult[];
-	initialInvestment: string;
-	months: string;
+	result: SimulationResult;
 }
 
-export function SimulationResults({
-	result,
-	initialInvestment,
-	months,
-}: SimulationResultsProps) {
+export function SimulationResults({ result }: SimulationResultsProps) {
 	return (
 		<Card>
 			<CardHeader>
-				<CardTitle>Resultado da Simulação</CardTitle>
-				<CardDescription>
-					{`Investimento inicial de ${formatCurrency(Number(initialInvestment))} por ${months} meses`}
-				</CardDescription>
+				<CardTitle>Resultado da última simulação</CardTitle>
+				<CardDescription />
 			</CardHeader>
 			<CardContent>
 				<Table>

@@ -1,72 +1,64 @@
 "use client";
 
 import { useForm } from "react-hook-form";
-import { SimulationForm } from "./simulation-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+
 import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardHeader,
-	CardTitle,
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
 } from "./ui/card";
 import type { SimulationFormData } from "@/lib/types";
 import { simulationFormSchema } from "@/lib/schemas";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { INDEXERS, INVESTMENT_TYPES, MODALITIES } from "@/lib/constants";
-import { useIndexData } from "@/hooks/use-index-data";
-import { useSimulation } from "@/hooks/use-simulation";
 import { SimulationResults } from "./simulation-results";
+import { useIndexersData } from "@/hooks/use-indexers-data";
+import { useSimulation } from "@/hooks/use-simulation";
+import { SimulationForm } from "./simulation-form";
 
 const defaultValues: SimulationFormData = {
-	initialInvestment: "",
-	monthlyInvestment: "",
-	months: "",
-	typeOfInvestment: INVESTMENT_TYPES.CDB,
-	modality: MODALITIES.POS,
-	indexer: INDEXERS.CDI,
-	rate: "",
+    initialInvestment: "",
+    months: 0,
+    monthlyInvestment: "",
+    investments: [],
 };
 
 export function FixedIncomeSimulator() {
-	const form = useForm<SimulationFormData>({
-		resolver: zodResolver(simulationFormSchema),
-		defaultValues,
-	});
+    const { error, indexersData, isLoading } = useIndexersData();
 
-	const { simulate, result } = useSimulation();
-	const { error, indexData, isLoading } = useIndexData(form.watch("indexer"));
+    const form = useForm<SimulationFormData>({
+        resolver: zodResolver(simulationFormSchema),
+        defaultValues,
+    });
 
-	const onSubmit = (data: SimulationFormData) => {
-		simulate(data, indexData);
-	};
+    const { simulate, result } = useSimulation();
 
-	return (
-		<div className="space-y-8">
-			<Card>
-				<CardHeader>
-					<CardTitle>Simulador de Investimentos</CardTitle>
-					<CardDescription>
-						Calcule o rendimento do seu investimento em renda fixa ao longo do
-						tempo
-					</CardDescription>
-				</CardHeader>
-				<CardContent>
-					<SimulationForm
-						form={form}
-						onSubmit={onSubmit}
-						indexData={indexData}
-						error={error}
-						isLoading={isLoading}
-					/>
-				</CardContent>
-			</Card>
-			{result && (
-				<SimulationResults
-					result={[result]}
-					initialInvestment={form.getValues("initialInvestment")}
-					months={form.getValues("months")}
-				/>
-			)}
-		</div>
-	);
+    const onSubmit = (data: SimulationFormData) => {
+        simulate(data, indexersData);
+    };
+
+    return (
+        <div className="space-y-8">
+            <Card>
+                <CardHeader>
+                    <CardTitle>Simulador de Investimentos</CardTitle>
+                    <CardDescription>
+                        Calcule o rendimento do seu investimento em renda fixa ao longo do
+                        tempo
+                    </CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <SimulationForm
+                        isFetchingIndexers={isLoading}
+                        fetchIndexersError={error}
+                        indexersData={indexersData}
+                        form={form}
+                        onSubmit={onSubmit}
+                    />
+                </CardContent>
+            </Card>
+            {result?.length > 0 && <SimulationResults result={result} />}
+        </div>
+    );
 }

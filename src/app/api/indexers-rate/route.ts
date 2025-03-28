@@ -2,9 +2,9 @@ import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
 type IndexerResponse = {
-    code: string;
-    description: string;
-    error: string;
+	code: string;
+	description: string;
+	error: string;
 };
 
 type Indexers = "cdi" | "ipca";
