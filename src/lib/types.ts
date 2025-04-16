@@ -15,7 +15,10 @@ export interface InvestmentYield {
 	totalNetAmount: number;
 }
 
-export type SimulationResult = InvestmentYield[];
+export type SimulationResult = {
+	description: string;
+	investmentsYields: InvestmentYield[];
+};
 
 export interface IndexerData {
 	indexer: Indexer;
@@ -29,3 +32,11 @@ export interface IndexerData {
 export type SimulationFormData = z.infer<typeof simulationFormSchema>;
 
 export type Investment = z.infer<typeof investmentSchema>;
+
+export type IndexerResponse = {
+	code: string;
+	description: string;
+	error: string;
+};
+
+export type Indexers = "cdi" | "ipca";

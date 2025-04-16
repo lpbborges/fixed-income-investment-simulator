@@ -1,4 +1,8 @@
+"use client";
+
 import { TrashIcon } from "lucide-react";
+import { memo } from "react";
+
 import { Button } from "./ui/button";
 import { Card, CardContent } from "./ui/card";
 import { Input } from "./ui/input";
@@ -14,7 +18,7 @@ type InvestmentItemProps = {
 	isDisabled: boolean;
 };
 
-export function InvestmentItem({
+export const InvestmentItem = memo(function InvestmentItem({
 	investment,
 	onChange,
 	onDelete,
@@ -26,6 +30,9 @@ export function InvestmentItem({
 			[field]: value,
 		});
 	};
+
+	const isIndexerDisabled =
+		investment.modality === MODALITIES.PRE || isDisabled;
 
 	return (
 		<Card className="mb-4">
@@ -86,7 +93,7 @@ export function InvestmentItem({
 						<RadioGroup
 							value={investment.indexer}
 							onValueChange={(value) => handleChange("indexer", value)}
-							disabled={investment.modality === MODALITIES.PRE || isDisabled}
+							disabled={isIndexerDisabled}
 							className="flex flex-row justify-between md:flex-col space-y-1"
 						>
 							<div className="flex items-center space-x-2">
@@ -134,4 +141,4 @@ export function InvestmentItem({
 			</CardContent>
 		</Card>
 	);
-}
+});
