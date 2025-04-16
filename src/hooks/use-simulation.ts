@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { RefObject, useState } from "react";
 
 import { MODALITIES, INDEXERS, INVESTMENT_TYPES } from "@/lib/constants";
 import * as financial from "@/lib/financial";
@@ -12,11 +12,12 @@ import type {
 import { formatPercent } from "@/lib/formatters";
 
 export function useSimulation() {
-	const [result, setResult] = useState<SimulationResult>([]);
+	const [result, setResult] = useState<SimulationResult | null>(null);
 
 	const simulate = (
 		formData: SimulationFormData,
 		indexersData: IndexerData[],
+		scrollTo: RefObject<HTMLTableElement | null>,
 	) => {
 		const initialInvestment =
 			Number.parseFloat(formData.initialInvestment) || 0;
@@ -64,7 +65,14 @@ export function useSimulation() {
 			(a, b) => b.totalNetIncome - a.totalNetIncome,
 		);
 
-		setResult(sortedResult);
+		setResult({
+			description: `Investimento inicial de R$ ${initialInvestment}, com aportes mensais de R$ ${monthlyInvestment} por um período de ${formData.months} meses.`,
+			investmentsYields: sortedResult,
+		});
+
+		if (scrollTo.current) {
+			scrollTo.current.scrollIntoView();
+		}
 	};
 
 	return { result, simulate };

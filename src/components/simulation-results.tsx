@@ -15,20 +15,22 @@ import {
 	TableHeader,
 	TableRow,
 } from "./ui/table";
+import type { RefObject } from "react";
 
 interface SimulationResultsProps {
 	result: SimulationResult;
+	ref: RefObject<HTMLTableElement | null>;
 }
 
-export function SimulationResults({ result }: SimulationResultsProps) {
+export function SimulationResults({ result, ref }: SimulationResultsProps) {
 	return (
 		<Card>
 			<CardHeader>
 				<CardTitle>Resultado da última simulação</CardTitle>
-				<CardDescription />
+				<CardDescription>{result.description}</CardDescription>
 			</CardHeader>
 			<CardContent>
-				<Table>
+				<Table ref={ref}>
 					<TableHeader>
 						<TableRow>
 							<TableHead>Investimento</TableHead>
@@ -38,7 +40,7 @@ export function SimulationResults({ result }: SimulationResultsProps) {
 						</TableRow>
 					</TableHeader>
 					<TableBody>
-						{result.map((simulation) => (
+						{result.investmentsYields.map((simulation) => (
 							<TableRow key={simulation.description}>
 								<TableCell>{simulation.description}</TableCell>
 								<TableCell className="text-center">
