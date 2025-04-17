@@ -9,7 +9,7 @@ import type {
 	Investment,
 	InvestmentYield,
 } from "@/lib/types";
-import { formatPercent } from "@/lib/formatters";
+import { formatCurrency, formatPercent } from "@/lib/formatters";
 
 export function useSimulation() {
 	const [result, setResult] = useState<SimulationResult | null>(null);
@@ -65,8 +65,15 @@ export function useSimulation() {
 			(a, b) => b.totalNetIncome - a.totalNetIncome,
 		);
 
+		const description =
+			initialInvestment <= 0
+				? `Aportes mensais de ${formatCurrency(monthlyInvestment)} por um período de ${formData.months} meses.`
+				: monthlyInvestment <= 0
+					? `Investimento inicial de ${formatCurrency(initialInvestment)} por um período de ${formData.months} meses.`
+					: `Investimento inicial de ${formatCurrency(initialInvestment)} e aportes mensais de ${formatCurrency(monthlyInvestment)} por um período de ${formData.months} meses.`;
+
 		setResult({
-			description: `Investimento inicial de R$ ${initialInvestment}, com aportes mensais de R$ ${monthlyInvestment} por um período de ${formData.months} meses.`,
+			description,
 			investmentsYields: sortedResult,
 		});
 
