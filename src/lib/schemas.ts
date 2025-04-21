@@ -20,7 +20,7 @@ export const simulationFormSchema = z
 	.object({
 		initialInvestment: z.string(),
 		monthlyInvestment: z.string(),
-		months: z.coerce.number().gt(0, 'Período deve ser maior que zero'),
+		months: z.string(),
 		investments: z
 			.array(investmentSchema)
 			.min(1, 'Adicione pelo menos um investimento'),
@@ -45,3 +45,7 @@ export const simulationFormSchema = z
 				'Aporte mensal ou investimento inicial deve ser maior que zero',
 		},
 	)
+	.refine(form => Number(form.months) > 0, {
+		path: ['months'],
+		message: 'Período deve ser maior que zero',
+	})
