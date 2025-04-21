@@ -1,12 +1,13 @@
-import type { SimulationResult } from "@/lib/types";
-import { formatCurrency } from "@/lib/formatters";
+import { formatCurrency } from '@/lib/formatters'
+import type { SimulationResult } from '@/lib/types'
+import type { RefObject } from 'react'
 import {
 	Card,
 	CardContent,
 	CardDescription,
 	CardHeader,
 	CardTitle,
-} from "./ui/card";
+} from './ui/card'
 import {
 	Table,
 	TableBody,
@@ -14,12 +15,11 @@ import {
 	TableHead,
 	TableHeader,
 	TableRow,
-} from "./ui/table";
-import type { RefObject } from "react";
+} from './ui/table'
 
 interface SimulationResultsProps {
-	result: SimulationResult;
-	ref: RefObject<HTMLTableElement | null>;
+	result: SimulationResult
+	ref: RefObject<HTMLTableElement | null>
 }
 
 export function SimulationResults({ result, ref }: SimulationResultsProps) {
@@ -34,17 +34,25 @@ export function SimulationResults({ result, ref }: SimulationResultsProps) {
 					<TableHeader>
 						<TableRow>
 							<TableHead>Investimento</TableHead>
-							<TableHead className="text-center">Valor total bruto</TableHead>
-							<TableHead className="text-center">Valor total líquido</TableHead>
-							<TableHead className="text-center">Rendimento líquido</TableHead>
+							<TableHead className="text-center">
+								Valor total bruto
+							</TableHead>
+							<TableHead className="text-center">
+								Valor total líquido
+							</TableHead>
+							<TableHead className="text-center">
+								Rendimento líquido
+							</TableHead>
 						</TableRow>
 					</TableHeader>
 					<TableBody>
-						{result.investmentsYields.map((simulation) => (
+						{result.investmentsYields.map(simulation => (
 							<TableRow key={simulation.description}>
 								<TableCell>{simulation.description}</TableCell>
 								<TableCell className="text-center">
-									{formatCurrency(simulation.totalGrossAmount)}
+									{formatCurrency(
+										simulation.totalGrossAmount,
+									)}
 								</TableCell>
 								<TableCell className="text-center">
 									{formatCurrency(simulation.totalNetAmount)}
@@ -58,5 +66,5 @@ export function SimulationResults({ result, ref }: SimulationResultsProps) {
 				</Table>
 			</CardContent>
 		</Card>
-	);
+	)
 }

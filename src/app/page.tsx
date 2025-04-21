@@ -1,4 +1,4 @@
-import { FixedIncomeSimulator } from "@/components/fixed-income-simulator";
+import { FixedIncomeSimulator } from '@/components/fixed-income-simulator'
 
 export default function Home() {
 	return (
@@ -9,5 +9,5 @@ export default function Home() {
 				</div>
 			</main>
 		</div>
-	);
+	)
 }

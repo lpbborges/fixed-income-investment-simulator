@@ -1,5 +1,5 @@
-import { z } from "zod";
-import { INVESTMENT_TYPES, MODALITIES, INDEXERS } from "./constants";
+import { z } from 'zod'
+import { INDEXERS, INVESTMENT_TYPES, MODALITIES } from './constants'
 
 export const investmentSchema = z.object({
 	id: z.string(),
@@ -9,36 +9,39 @@ export const investmentSchema = z.object({
 	indexer: z.enum([INDEXERS.CDI, INDEXERS.IPCA]),
 	rate: z
 		.string()
-		.min(1, "Taxa é obrigatória")
+		.min(1, 'Taxa é obrigatória')
 		.refine(
-			(val) => !Number.isNaN(Number(val)) && Number(val) >= 0,
-			"Taxa deve ser maior ou igual a zero",
+			val => !Number.isNaN(Number(val)) && Number(val) >= 0,
+			'Taxa deve ser maior ou igual a zero',
 		),
-});
+})
 
 export const simulationFormSchema = z
 	.object({
 		initialInvestment: z.string(),
 		monthlyInvestment: z.string(),
-		months: z.coerce.number().gt(0, "Período deve ser maior que zero"),
+		months: z.coerce.number().gt(0, 'Período deve ser maior que zero'),
 		investments: z
 			.array(investmentSchema)
-			.min(1, "Adicione pelo menos um investimento"),
+			.min(1, 'Adicione pelo menos um investimento'),
 	})
 	.refine(
-		(form) =>
-			Number(form.initialInvestment) > 0 || Number(form.monthlyInvestment) > 0,
+		form =>
+			Number(form.initialInvestment) > 0 ||
+			Number(form.monthlyInvestment) > 0,
 		{
-			path: ["initialInvestment"],
+			path: ['initialInvestment'],
 			message:
-				"Investimento inicial ou o aporte mensal deve ser maior que zero",
+				'Investimento inicial ou o aporte mensal deve ser maior que zero',
 		},
 	)
 	.refine(
-		(form) =>
-			Number(form.initialInvestment) > 0 || Number(form.monthlyInvestment) > 0,
+		form =>
+			Number(form.initialInvestment) > 0 ||
+			Number(form.monthlyInvestment) > 0,
 		{
-			path: ["monthlyInvestment"],
-			message: "Aporte mensal ou investimento inicial deve ser maior que zero",
+			path: ['monthlyInvestment'],
+			message:
+				'Aporte mensal ou investimento inicial deve ser maior que zero',
 		},
-	);
+	)

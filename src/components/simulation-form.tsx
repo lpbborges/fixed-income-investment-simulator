@@ -1,13 +1,14 @@
-"use client";
+'use client'
 
-import { Loader2, PlusCircle } from "lucide-react";
-import type { UseFormReturn } from "react-hook-form";
+import { Loader2, PlusCircle } from 'lucide-react'
+import type { UseFormReturn } from 'react-hook-form'
 
-import type { SimulationFormData, Investment, IndexerData } from "@/lib/types";
-import { INVESTMENT_TYPES, MODALITIES, INDEXERS } from "@/lib/constants";
-import { formatDate } from "@/lib/formatters";
-import { InvestmentItem } from "./investment-item";
-import { Button } from "./ui/button";
+import { INDEXERS, INVESTMENT_TYPES, MODALITIES } from '@/lib/constants'
+import { formatDate } from '@/lib/formatters'
+import type { IndexerData, Investment, SimulationFormData } from '@/lib/types'
+import { useCallback } from 'react'
+import { InvestmentItem } from './investment-item'
+import { Button } from './ui/button'
 import {
 	Form,
 	FormControl,
@@ -15,16 +16,15 @@ import {
 	FormItem,
 	FormLabel,
 	FormMessage,
-} from "./ui/form";
-import { Input } from "./ui/input";
-import { useCallback } from "react";
+} from './ui/form'
+import { Input } from './ui/input'
 
 interface SimulationFormProps {
-	form: UseFormReturn<SimulationFormData>;
-	onSubmit: (data: SimulationFormData) => void;
-	fetchIndexersError: string | null;
-	indexersData: IndexerData[];
-	isFetchingIndexers: boolean;
+	form: UseFormReturn<SimulationFormData>
+	onSubmit: (data: SimulationFormData) => void
+	fetchIndexersError: string | null
+	indexersData: IndexerData[]
+	isFetchingIndexers: boolean
 }
 
 export function SimulationForm({
@@ -34,7 +34,7 @@ export function SimulationForm({
 	indexersData,
 	isFetchingIndexers,
 }: SimulationFormProps) {
-	const investments = form.watch("investments");
+	const investments = form.watch('investments')
 
 	const addInvestment = useCallback(() => {
 		const newInvestment: Investment = {
@@ -42,25 +42,25 @@ export function SimulationForm({
 			typeOfInvestment: INVESTMENT_TYPES.CDB,
 			modality: MODALITIES.POS,
 			indexer: INDEXERS.CDI,
-			rate: "100",
-		};
+			rate: '100',
+		}
 
-		form.setValue("investments", [...investments, newInvestment], {
+		form.setValue('investments', [...investments, newInvestment], {
 			shouldValidate: true,
-		});
-	}, [form, investments]);
+		})
+	}, [form, investments])
 
 	const deleteInvestment = (id: string) => {
-		const filteredInvestments = investments.filter((inv) => inv.id !== id);
-		form.setValue("investments", filteredInvestments);
-	};
+		const filteredInvestments = investments.filter(inv => inv.id !== id)
+		form.setValue('investments', filteredInvestments)
+	}
 
 	const updateInvestment = (updatedInvestment: Investment) => {
-		const updatedInvestments = investments.map((inv) =>
+		const updatedInvestments = investments.map(inv =>
 			inv.id === updatedInvestment.id ? updatedInvestment : inv,
-		);
-		form.setValue("investments", updatedInvestments);
-	};
+		)
+		form.setValue('investments', updatedInvestments)
+	}
 
 	return (
 		<Form {...form}>
@@ -127,23 +127,27 @@ export function SimulationForm({
 					</div>
 				) : (
 					<div className="w-full flex gap-4">
-						{indexersData.map((data) => (
+						{indexersData.map(data => (
 							<div
 								key={data.indexer}
 								className="w-full space-y-1 p-2 border rounded-md"
 							>
 								<p className="text-sm font-medium">
-									{data.indexer.toUpperCase()}: {(data.rate * 100).toFixed(2)}%
-									ao ano
+									{data.indexer.toUpperCase()}:{' '}
+									{(data.rate * 100).toFixed(2)}% ao ano
 								</p>
 								<p className="text-xs text-muted-foreground">
-									{data.date && ` • Atualizado em: ${formatDate(data.date)}`}
-									{data.description && ` • ${data.description}`}
+									{data.date &&
+										` • Atualizado em: ${formatDate(data.date)}`}
+									{data.description &&
+										` • ${data.description}`}
 								</p>
 							</div>
 						))}
 						{fetchIndexersError && (
-							<p className="text-xs text-destructive">{fetchIndexersError}</p>
+							<p className="text-xs text-destructive">
+								{fetchIndexersError}
+							</p>
 						)}
 					</div>
 				)}
@@ -167,16 +171,16 @@ export function SimulationForm({
 					</div>
 					{investments.length <= 0 && (
 						<div
-							className={`text-center p-4 border border-dashed rounded-md ${form.getFieldState("investments").invalid ? " border-destructive" : ""}`}
+							className={`text-center p-4 border border-dashed rounded-md ${form.getFieldState('investments').invalid ? ' border-destructive' : ''}`}
 						>
 							<p
-								className={`${form.getFieldState("investments").invalid ? "text-destructive" : "text-muted-foreground"}`}
+								className={`${form.getFieldState('investments').invalid ? 'text-destructive' : 'text-muted-foreground'}`}
 							>
 								Adicione pelo menos um investimento para simular
 							</p>
 						</div>
 					)}
-					{investments.map((investment) => (
+					{investments.map(investment => (
 						<InvestmentItem
 							key={investment.id}
 							investment={investment}
@@ -192,7 +196,7 @@ export function SimulationForm({
 						variant="outline"
 						disabled={isFetchingIndexers}
 						onClick={() => {
-							form.reset();
+							form.reset()
 						}}
 					>
 						Limpar
@@ -201,11 +205,11 @@ export function SimulationForm({
 						{isFetchingIndexers ? (
 							<Loader2 className="h-4 w-4 animate-spin" />
 						) : (
-							"Simular"
+							'Simular'
 						)}
 					</Button>
 				</div>
 			</form>
 		</Form>
-	);
+	)
 }
