@@ -1,6 +1,6 @@
 'use client'
 
-import { Loader2, PlusCircle } from 'lucide-react'
+import { ChartLine, Loader2, PlusCircle } from 'lucide-react'
 import type { UseFormReturn } from 'react-hook-form'
 
 import { INDEXERS, INVESTMENT_TYPES, MODALITIES } from '@/lib/constants'
@@ -64,7 +64,7 @@ export function SimulationForm({
 
 	return (
 		<Form {...form}>
-			<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+			<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
 				<div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 					<FormField
 						control={form.control}
@@ -130,15 +130,20 @@ export function SimulationForm({
 						{indexersData.map(data => (
 							<div
 								key={data.indexer}
-								className="w-full space-y-1 p-2 border rounded-md"
+								className="bg-secondary/5 w-full space-y-1 p-4 border border-secondary/20 rounded-md shadow-sm"
 							>
-								<p className="text-sm font-medium">
-									{data.indexer.toUpperCase()}:{' '}
-									{(data.rate * 100).toFixed(2)}% ao ano
+								<p className="text-secondary font-semibold">
+									{data.indexer.toUpperCase()}
+								</p>
+								<p className="text-lg font-bold">
+									{(data.rate * 100).toFixed(2)}%{' '}
+									<span className="text-sm font-normal text-muted-foreground">
+										ao ano
+									</span>
 								</p>
 								<p className="text-xs text-muted-foreground">
 									{data.date &&
-										` • Atualizado em: ${formatDate(data.date)}`}
+										`Atualizado em: ${formatDate(data.date)}`}
 									{data.description &&
 										` • ${data.description}`}
 								</p>
@@ -158,7 +163,7 @@ export function SimulationForm({
 								Investimentos
 							</h3>
 							<Button
-								className="flex-1 sm:flex-0"
+								className="flex-1 sm:flex-0 border-secondary/20 hover:bg-secondary/5  text-secondary hover:text-secondary"
 								type="button"
 								onClick={addInvestment}
 								variant="outline"
@@ -190,8 +195,9 @@ export function SimulationForm({
 						/>
 					))}
 				</div>
-				<div className="w-full flex justify-end gap-2">
+				<div className="w-full flex justify-end gap-2 pb-6">
 					<Button
+						className="border-secondary/20 hover:bg-secondary/5 text-secondary hover:text-secondary"
 						type="button"
 						variant="outline"
 						disabled={isFetchingIndexers}
@@ -205,7 +211,10 @@ export function SimulationForm({
 						{isFetchingIndexers ? (
 							<Loader2 className="h-4 w-4 animate-spin" />
 						) : (
-							'Simular'
+							<>
+								<ChartLine />
+								Simular
+							</>
 						)}
 					</Button>
 				</div>

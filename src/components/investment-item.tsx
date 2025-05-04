@@ -35,7 +35,7 @@ export const InvestmentItem = memo(function InvestmentItem({
 		investment.modality === MODALITIES.PRE || isDisabled
 
 	return (
-		<Card className="mb-4">
+		<Card className="mb-4 bg-accent/3 border border-accent/10">
 			<CardContent className="pb-2 pt-0">
 				<div className="grid grid-cols-1 md:grid-cols-3 gap-2">
 					<div>
@@ -52,6 +52,7 @@ export const InvestmentItem = memo(function InvestmentItem({
 						>
 							<div className="flex items-center space-x-2">
 								<RadioGroupItem
+									className="bg-white"
 									value={INVESTMENT_TYPES.CDB}
 									id={`cdb-${investment.id}`}
 								/>
@@ -61,6 +62,7 @@ export const InvestmentItem = memo(function InvestmentItem({
 							</div>
 							<div className="flex items-center space-x-2 w-24">
 								<RadioGroupItem
+									className="bg-white"
 									value={INVESTMENT_TYPES.LCI_LCA}
 									id={`lci-lca-${investment.id}`}
 								/>
@@ -83,6 +85,7 @@ export const InvestmentItem = memo(function InvestmentItem({
 						>
 							<div className="flex items-center space-x-2">
 								<RadioGroupItem
+									className="bg-white"
 									value={MODALITIES.POS}
 									id={`pos-${investment.id}`}
 								/>
@@ -92,6 +95,7 @@ export const InvestmentItem = memo(function InvestmentItem({
 							</div>
 							<div className="flex items-center space-x-2 w-24">
 								<RadioGroupItem
+									className="bg-white"
 									value={MODALITIES.PRE}
 									id={`pre-${investment.id}`}
 								/>
@@ -114,6 +118,7 @@ export const InvestmentItem = memo(function InvestmentItem({
 						>
 							<div className="flex items-center space-x-2">
 								<RadioGroupItem
+									className="bg-white"
 									value={INDEXERS.CDI}
 									id={`indexer-cdi-${investment.id}`}
 								/>
@@ -123,6 +128,7 @@ export const InvestmentItem = memo(function InvestmentItem({
 							</div>
 							<div className="flex items-center space-x-2 w-24">
 								<RadioGroupItem
+									className="bg-white"
 									value={INDEXERS.IPCA}
 									id={`indexer-ipca-${investment.id}`}
 								/>
@@ -150,12 +156,13 @@ export const InvestmentItem = memo(function InvestmentItem({
 								)
 							}
 							placeholder="100"
-							className="h-8"
+							className="h-8 bg-white"
 							disabled={isDisabled}
 						/>
 					</div>
 					<Button
 						variant="outline-destructive"
+						className="bg-white"
 						size="sm"
 						onClick={() => onDelete(investment.id)}
 						disabled={isDisabled}

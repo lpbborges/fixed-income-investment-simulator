@@ -16,6 +16,7 @@ import {
 	TableHeader,
 	TableRow,
 } from './ui/table'
+import { ChartLine } from 'lucide-react'
 
 interface SimulationResultsProps {
 	result: SimulationResult
@@ -24,46 +25,62 @@ interface SimulationResultsProps {
 
 export function SimulationResults({ result, ref }: SimulationResultsProps) {
 	return (
-		<Card>
-			<CardHeader>
-				<CardTitle>Resultado da última simulação</CardTitle>
+		<Card className="pt-0 pb-6">
+			<CardHeader className="bg-success/5 p-6 border-b border-success/10">
+				<CardTitle className="text-success flex items-center gap-2 text-2xl">
+					<ChartLine />
+					Resultado da última simulação
+				</CardTitle>
 				<CardDescription>{result.description}</CardDescription>
 			</CardHeader>
 			<CardContent>
-				<Table ref={ref}>
-					<TableHeader>
-						<TableRow>
-							<TableHead>Investimento</TableHead>
-							<TableHead className="text-center">
-								Valor total bruto
-							</TableHead>
-							<TableHead className="text-center">
-								Valor total líquido
-							</TableHead>
-							<TableHead className="text-center">
-								Rendimento líquido
-							</TableHead>
-						</TableRow>
-					</TableHeader>
-					<TableBody>
-						{result.investmentsYields.map(simulation => (
-							<TableRow key={simulation.description}>
-								<TableCell>{simulation.description}</TableCell>
-								<TableCell className="text-center">
-									{formatCurrency(
-										simulation.totalGrossAmount,
-									)}
-								</TableCell>
-								<TableCell className="text-center">
-									{formatCurrency(simulation.totalNetAmount)}
-								</TableCell>
-								<TableCell className="text-center">
-									{formatCurrency(simulation.totalNetIncome)}
-								</TableCell>
+				<div className="border rounded-md font-medium">
+					<Table ref={ref} className="border-collapse">
+						<TableHeader>
+							<TableRow className="bg-muted">
+								<TableHead className="font-semibold py-4">
+									Investimento
+								</TableHead>
+								<TableHead className="text-center font-semibold py-4">
+									Valor total bruto
+								</TableHead>
+								<TableHead className="text-center font-semibold py-4">
+									Valor total líquido
+								</TableHead>
+								<TableHead className="text-center font-semibold py-4">
+									Rendimento líquido
+								</TableHead>
 							</TableRow>
-						))}
-					</TableBody>
-				</Table>
+						</TableHeader>
+						<TableBody>
+							{result.investmentsYields.map(simulation => (
+								<TableRow
+									key={simulation.description}
+									className="first:bg-success/5 group border-b-0"
+								>
+									<TableCell className="py-4 font-medium">
+										{simulation.description}
+									</TableCell>
+									<TableCell className="text-center py-4 font-medium">
+										{formatCurrency(
+											simulation.totalGrossAmount,
+										)}
+									</TableCell>
+									<TableCell className="text-center py-4 font-medium">
+										{formatCurrency(
+											simulation.totalNetAmount,
+										)}
+									</TableCell>
+									<TableCell className="text-center py-4 font-medium group-first:text-success">
+										{formatCurrency(
+											simulation.totalNetIncome,
+										)}
+									</TableCell>
+								</TableRow>
+							))}
+						</TableBody>
+					</Table>
+				</div>
 			</CardContent>
 		</Card>
 	)
