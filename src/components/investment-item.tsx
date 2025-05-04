@@ -162,7 +162,7 @@ export const InvestmentItem = memo(function InvestmentItem({
 					</div>
 					<Button
 						variant="outline-destructive"
-						className="bg-white"
+						className="bg-white hover:bg-destructive/15 hover:text-destructive"
 						size="sm"
 						onClick={() => onDelete(investment.id)}
 						disabled={isDisabled}

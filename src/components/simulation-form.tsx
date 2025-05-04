@@ -126,7 +126,7 @@ export function SimulationForm({
 						Obtendo taxas atuais dos indexadores...
 					</div>
 				) : (
-					<div className="w-full flex gap-4">
+					<div className="w-full flex flex-col gap-4 sm:flex-row">
 						{indexersData.map(data => (
 							<div
 								key={data.indexer}
