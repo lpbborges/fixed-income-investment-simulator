@@ -17,6 +17,7 @@ import {
 	CardHeader,
 	CardTitle,
 } from './ui/card'
+import { DollarSign } from 'lucide-react'
 
 const defaultValues: SimulationFormData = {
 	initialInvestment: '',
@@ -42,9 +43,12 @@ export function FixedIncomeSimulator() {
 
 	return (
 		<div className="space-y-8">
-			<Card>
-				<CardHeader>
-					<CardTitle>Simulador de Investimentos</CardTitle>
+			<Card className="py-0">
+				<CardHeader className="bg-primary/5 p-6 border-b border-primary/10">
+					<CardTitle className="text-primary flex items-center gap-2 text-2xl">
+						<DollarSign />
+						Simulador de Investimentos
+					</CardTitle>
 					<CardDescription>
 						Calcule o rendimento do seu investimento em renda fixa
 						ao longo do tempo
