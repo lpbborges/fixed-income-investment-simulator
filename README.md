@@ -1,10 +1,10 @@
-# Fixed Income Simulator
+# Fixed Income Investment Simulator
 
 > Acesse no link: https://fixed-income-investment-simulator.vercel.app/
 
 ## 📖 Descrição
 
-O **Fixed Income Simulator** é uma aplicação web construída com **Next.js 15** e **React 19** que permite simular rendimentos de diferentes investimentos de renda fixa.
+O **Fixed Income Investment Simulator** é uma aplicação web construída com **Next.js 15** e **React 19** que permite simular rendimentos de diferentes investimentos de renda fixa.
 
 ## ✨ Recursos Principais
 
