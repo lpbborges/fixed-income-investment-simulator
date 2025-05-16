@@ -10,6 +10,7 @@ export const investmentSchema = z.object({
 	rate: z
 		.string()
 		.min(1, 'Taxa é obrigatória')
+		.transform(value => value.replace(',', '.'))
 		.refine(
 			val => !Number.isNaN(Number(val)) && Number(val) >= 0,
 			'Taxa deve ser maior ou igual a zero',
@@ -18,8 +19,12 @@ export const investmentSchema = z.object({
 
 export const simulationFormSchema = z
 	.object({
-		initialInvestment: z.string(),
-		monthlyInvestment: z.string(),
+		initialInvestment: z
+			.string()
+			.transform(value => value.replace(',', '.')),
+		monthlyInvestment: z
+			.string()
+			.transform(value => value.replace(',', '.')),
 		months: z.string(),
 		investments: z
 			.array(investmentSchema)

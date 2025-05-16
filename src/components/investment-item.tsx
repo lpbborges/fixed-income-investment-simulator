@@ -7,9 +7,9 @@ import { INDEXERS, INVESTMENT_TYPES, MODALITIES } from '@/lib/constants'
 import type { Investment } from '@/lib/types'
 import { Button } from './ui/button'
 import { Card, CardContent } from './ui/card'
-import { Input } from './ui/input'
 import { Label } from './ui/label'
 import { RadioGroup, RadioGroupItem } from './ui/radio-group'
+import { DecimalInput } from './decimal-input'
 
 type InvestmentItemProps = {
 	investment: Investment
@@ -147,15 +147,12 @@ export const InvestmentItem = memo(function InvestmentItem({
 						<Label className="text-xs mb-1 block">
 							Rentabilidade (%)
 						</Label>
-						<Input
+						<DecimalInput
 							value={investment.rate}
-							onChange={e =>
-								handleChange(
-									'rate',
-									e.target.value.replace(/[^0-9,.]/g, ''),
-								)
+							onChange={(value: string) =>
+								handleChange('rate', value)
 							}
-							placeholder="100"
+							placeholder="100,00"
 							className="h-8 bg-white"
 							disabled={isDisabled}
 						/>

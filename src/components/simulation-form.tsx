@@ -1,12 +1,12 @@
 'use client'
 
 import { ChartLine, Loader2, PlusCircle } from 'lucide-react'
+import { useCallback, useMemo } from 'react'
 import type { UseFormReturn } from 'react-hook-form'
 
 import { INDEXERS, INVESTMENT_TYPES, MODALITIES } from '@/lib/constants'
 import { formatDate } from '@/lib/formatters'
 import type { IndexerData, Investment, SimulationFormData } from '@/lib/types'
-import { useCallback } from 'react'
 import { InvestmentItem } from './investment-item'
 import { Button } from './ui/button'
 import {
@@ -18,6 +18,7 @@ import {
 	FormMessage,
 } from './ui/form'
 import { Input } from './ui/input'
+import { DecimalInput } from './decimal-input'
 
 interface SimulationFormProps {
 	form: UseFormReturn<SimulationFormData>
@@ -50,6 +51,13 @@ export function SimulationForm({
 		})
 	}, [form, investments])
 
+	const isInvestmentsInvalid = useMemo(
+		() =>
+			form.getFieldState('investments').invalid &&
+			form.formState.isSubmitted,
+		[form.getFieldState, form.formState.isSubmitted],
+	)
+
 	const deleteInvestment = (id: string) => {
 		const filteredInvestments = investments.filter(inv => inv.id !== id)
 		form.setValue('investments', filteredInvestments)
@@ -71,50 +79,57 @@ export function SimulationForm({
 						name="initialInvestment"
 						render={({ field }) => (
 							<FormItem>
-								<FormLabel>Investimento Inicial (R$)</FormLabel>
-								<FormControl>
-									<Input
-										{...field}
-										placeholder="1000"
-										aria-label="Investimento Inicial em Reais"
-									/>
-								</FormControl>
+								<div className="space-y-2">
+									<FormLabel>
+										Investimento Inicial (R$)
+									</FormLabel>
+									<FormControl>
+										<DecimalInput
+											placeholder="1000,00"
+											aria-label="Investimento Inicial em Reais"
+											{...field}
+										/>
+									</FormControl>
+								</div>
 								<FormMessage />
 							</FormItem>
 						)}
 					/>
-
 					<FormField
 						control={form.control}
 						name="monthlyInvestment"
 						render={({ field }) => (
 							<FormItem>
-								<FormLabel>Aporte mensal (R$)</FormLabel>
-								<FormControl>
-									<Input
-										{...field}
-										placeholder="100"
-										aria-label="Aporte mensal em reais"
-									/>
-								</FormControl>
+								<div className="space-y-2">
+									<FormLabel>Aporte mensal (R$)</FormLabel>
+									<FormControl>
+										<DecimalInput
+											placeholder="100,00"
+											aria-label="Aporte mensal em reais"
+											{...field}
+										/>
+									</FormControl>
+								</div>
 								<FormMessage />
 							</FormItem>
 						)}
 					/>
-
 					<FormField
 						control={form.control}
 						name="months"
 						render={({ field }) => (
 							<FormItem>
-								<FormLabel>Período (meses)</FormLabel>
-								<FormControl>
-									<Input
-										{...field}
-										placeholder="12"
-										aria-label="Período em meses"
-									/>
-								</FormControl>
+								<div className="space-y-2">
+									<FormLabel>Período (meses)</FormLabel>
+									<FormControl>
+										<Input
+											{...field}
+											placeholder="12"
+											aria-label="Período em meses"
+											type="number"
+										/>
+									</FormControl>
+								</div>
 								<FormMessage />
 							</FormItem>
 						)}
@@ -176,10 +191,10 @@ export function SimulationForm({
 					</div>
 					{investments.length <= 0 && (
 						<div
-							className={`text-center p-4 border border-dashed rounded-md ${form.getFieldState('investments').invalid ? ' border-destructive' : ''}`}
+							className={`text-center p-4 border border-dashed rounded-md ${isInvestmentsInvalid ? ' border-destructive' : ''}`}
 						>
 							<p
-								className={`${form.getFieldState('investments').invalid ? 'text-destructive' : 'text-muted-foreground'}`}
+								className={`${isInvestmentsInvalid ? 'text-destructive' : 'text-muted-foreground'}`}
 							>
 								Adicione pelo menos um investimento para simular
 							</p>
