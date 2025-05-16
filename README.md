@@ -1,6 +1,6 @@
 # Fixed Income Investment Simulator
 
-> Acesse no link: https://fixed-income-investment-simulator-ewjm.vercel.app/
+> Acesse no link: https://fixed-income-investment-simulator.vercel.app/
 
 ## 📖 Descrição
 
