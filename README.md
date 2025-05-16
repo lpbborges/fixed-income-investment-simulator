@@ -1,6 +1,6 @@
 # Fixed Income Simulator
 
-> Acesse no link: https://fixed-income-simulator.vercel.app/
+> Acesse no link: https://fixed-income-investment-simulator.vercel.app/
 
 ## 📖 Descrição
 
@@ -36,8 +36,8 @@ O **Fixed Income Simulator** é uma aplicação web construída com **Next.js 15
 1. **Clone o repositório**
 
    ```bash
-   git clone https://github.com/lpbborges/fixed-income-simulator.git
-   cd fixed-income-simulator
+   git clone https://github.com/lpbborges/fixed-income-investment-simulator.git
+   cd fixed-income-investment-simulator
    ```
 
 2. **Instale as dependências**

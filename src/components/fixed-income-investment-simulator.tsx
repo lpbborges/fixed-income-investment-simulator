@@ -1,13 +1,14 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
+import { DollarSign } from 'lucide-react'
+import { useRef } from 'react'
 import { useForm } from 'react-hook-form'
 
 import { useIndexersData } from '@/hooks/use-indexers-data'
 import { useSimulation } from '@/hooks/use-simulation'
 import { simulationFormSchema } from '@/lib/schemas'
 import type { SimulationFormData } from '@/lib/types'
-import { useRef } from 'react'
 import { SimulationForm } from './simulation-form'
 import { SimulationResults } from './simulation-results'
 import {
@@ -17,7 +18,6 @@ import {
 	CardHeader,
 	CardTitle,
 } from './ui/card'
-import { DollarSign } from 'lucide-react'
 
 const defaultValues: SimulationFormData = {
 	initialInvestment: '',
@@ -26,7 +26,7 @@ const defaultValues: SimulationFormData = {
 	investments: [],
 }
 
-export function FixedIncomeSimulator() {
+export function FixedIncomeInvestmentSimulator() {
 	const resultsRef = useRef<HTMLTableElement>(null)
 	const { error, indexersData, isLoading } = useIndexersData()
 
@@ -50,8 +50,8 @@ export function FixedIncomeSimulator() {
 						Simulador de Investimentos
 					</CardTitle>
 					<CardDescription>
-						Calcule o rendimento do seu investimento em renda fixa
-						ao longo do tempo
+						Calcule o rendimento do seu investimento de{' '}
+						<b>renda fixa</b> ao longo do tempo
 					</CardDescription>
 				</CardHeader>
 				<CardContent>

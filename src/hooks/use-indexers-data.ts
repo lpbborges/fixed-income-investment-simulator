@@ -1,3 +1,5 @@
+'use client'
+
 import type { IndexerData } from '@/lib/types'
 import { useEffect, useState } from 'react'
 
@@ -13,7 +15,10 @@ export function useIndexersData() {
 		const fetchIndexData = async () => {
 			try {
 				setIsLoading(true)
-				const response = await fetch('/api/indexers-rate', { signal })
+				const response = await fetch('/api/indexers-rate', {
+					signal,
+					cache: 'no-store',
+				})
 
 				if (!response.ok) {
 					throw new Error(
@@ -22,6 +27,7 @@ export function useIndexersData() {
 				}
 
 				const data = await response.json()
+
 				setIndexersData(data)
 				setError(null)
 			} catch (err) {
