@@ -1,6 +1,6 @@
 'use client'
 
-import { ChartLine, Loader2, PlusCircle } from 'lucide-react'
+import { ChartLine, Loader2, PlusCircle, RefreshCw } from 'lucide-react'
 import { useCallback, useMemo } from 'react'
 import type { UseFormReturn } from 'react-hook-form'
 
@@ -220,6 +220,7 @@ export function SimulationForm({
 							form.reset()
 						}}
 					>
+						<RefreshCw className="h-4 w-4" aria-hidden="true" />
 						Limpar
 					</Button>
 					<Button type="submit" disabled={isFetchingIndexers}>

@@ -79,7 +79,9 @@ export function useSimulation() {
 		})
 
 		if (scrollTo.current) {
-			scrollTo.current.scrollIntoView()
+			scrollTo.current.scrollIntoView({
+				behavior: 'smooth',
+			})
 		}
 	}
 
